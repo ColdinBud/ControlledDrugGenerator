@@ -107,7 +107,7 @@ namespace ControlledDrugReportGenerator.Class
             Excel.Range wRange;
 
             excelApp = new Excel.Application();
-            excelApp.Visible = false;
+            excelApp.Visible = true;
             excelApp.DisplayAlerts = false;
 
             wBook = excelApp.Workbooks.Add(Type.Missing);
@@ -211,6 +211,12 @@ namespace ControlledDrugReportGenerator.Class
                             Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic);
                         //wSheet.get_Range("E" + (curLine + i).ToString(), "E" + (curLine + i + 3)).BorderAround2(Excel.XlLineStyle.xlContinuous,
                         //   Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic);
+
+                        /*
+                         * cellRange = oSheet.get_Range(oSheet.Cells[3, 10], oSheet.Cells[15, 11]);
+cellRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+cellRange.Borders.Weight = Excel.XlBorderWeight.xlThin;
+                         */
 
                         count++;
                     }
@@ -342,23 +348,17 @@ namespace ControlledDrugReportGenerator.Class
                 //wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
                 //wSheet.PageSetup.Application.ActivePrinter = Properties.Settings.Default.ActivePrinter;
 
-                wSheet.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, savePdfPath);
-                result += "已建立 " + savePdfPath + "\r\n";
+                //wSheet.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, savePdfPath);
+                //result += "已建立 " + savePdfPath + "\r\n";
 
                 wSheet = null;
             }
-
-            //string pathFile = @"I:\Work\Regain\report\" + DateTime.Now.ToString("yyyyMMdd-hhmm") + "-非注射用1-3級管制藥品使用紀錄";
-
 
             string pathFile = $"{Properties.Settings.Default.FilePath}\\{currentDate}\\{currentDate}-非注射用1-3級管制藥品使用紀錄";
 
             wBook.SaveAs(pathFile, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
-
-            //string pathFile = $"I:\\Work\\Regain\\report\\{DateTime.Now.ToString("yyyy-MM-dd-HH:mm:ss")}管制藥報表";
-            //wBook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, pathFile);
 
             result += "已建立 " + pathFile + "\r\n";
 
