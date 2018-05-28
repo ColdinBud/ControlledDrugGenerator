@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ControlledDrugReportGenerator
+namespace ControlledDrugReportGenerator.View
 {
-    public partial class Form1 : Form
+    public partial class FormConfig : Form
     {
-        public Form1()
+        public FormConfig()
         {
             InitializeComponent();
         }
