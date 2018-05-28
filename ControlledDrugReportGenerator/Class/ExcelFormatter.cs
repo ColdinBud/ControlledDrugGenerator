@@ -362,7 +362,6 @@ namespace ControlledDrugReportGenerator.Class
 
             result += "已建立 " + pathFile + "\r\n";
 
-
             wBook.Close(false, Type.Missing, Type.Missing);
             excelApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(wBook);
