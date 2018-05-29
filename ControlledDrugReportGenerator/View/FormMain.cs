@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,13 +92,23 @@ namespace ControlledDrugReportGenerator.View
         private void button3_Click(object sender, EventArgs e)
         {
             stopBtn_Click(sender, e);
+
+            string dateFormat = DateTime.Now.ToString("yyyyMMdd");
+            string dateTime = DateTime.Now.ToString("HHmm");
+
+            string stationFileName = label1.Text.Substring(label1.Text.LastIndexOf("\\") + 1);
+            string orderFileName = label2.Text.Substring(label2.Text.LastIndexOf("\\") + 1);
+
+            File.Copy(label1.Text, $"{Properties.Settings.Default.FilePath}\\{dateFormat}\\原始資料\\{dateTime}-{stationFileName}", false);
+            File.Copy(label2.Text, $"{Properties.Settings.Default.FilePath}\\{dateFormat}\\原始資料\\{dateTime}-{orderFileName}", false);
+
             List<ReportData> stationList = CombineCsv.CreateCsv(label1.Text, label2.Text);
 
-            string dateTime = DateTime.Now.ToString("HH:mm:ss");
+            string currentTime = DateTime.Now.ToString("HH:mm:ss");
 
-            txtMessage.Text += $"{DateTime.Now.ToString("HH:mm:ss")}:    資料處理中，請稍後...\r\n";
-            txtMessage.Text += $"{DateTime.Now.ToString("HH:mm:ss")}:    {new ExcelFormatter().CreateTotal(stationList)}";
-            txtMessage.Text += $"{DateTime.Now.ToString("HH:mm:ss")}:    {new ExcelFormatter().FormatExcel(stationList)}";
+            txtMessage.Text += $"{currentTime}:    資料處理中，請稍後...\r\n";
+            txtMessage.Text += $"{currentTime}:    {new ExcelFormatter().CreateTotal(stationList)}";
+            txtMessage.Text += $"{currentTime}:    {new ExcelFormatter().FormatExcel(stationList)}";
             //button3.Enabled = true;
         }
     }

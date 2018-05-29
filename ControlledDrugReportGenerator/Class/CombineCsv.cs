@@ -104,6 +104,9 @@ namespace ControlledDrugReportGenerator.Class
                         case 31:
                             report.OrderID = stationCells[c];
                             break;
+                        case 32:
+                            report.OrderStartTime = stationCells[c];
+                            break;
                         case 34:
                             report.PatientID = stationCells[c];
                             break;

@@ -186,7 +186,7 @@ namespace ControlledDrugReportGenerator.Class
                     int count = 1;
                     for (int i = 5; i < 45; i += 4)
                     {
-                        string[] dateTime = groupData[((curPage - 1) * 10 + count) - 1].TransactionDate.Split(' ')[0].Split('/');
+                        string[] dateTime = groupData[((curPage - 1) * 10 + count) - 1].OrderStartTime.Split(' ')[0].Split('/');
                         string dateFormat = dateTime[0] + (dateTime[1].Length == 1 ? "0" + dateTime[1] : dateTime[1]) +
                             (dateTime[2].Length == 1 ? "0" + dateTime[2] : dateTime[2]);
 

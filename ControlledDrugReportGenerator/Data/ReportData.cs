@@ -12,6 +12,7 @@ namespace ControlledDrugReportGenerator.Data
         public string PatientName { get; set; }
         public string TransactionDate { get; set; }
         public string OrderID { get; set; }
+        public string OrderStartTime { get; set; }
         public string Dose { get; set; }
         public string UserName { get; set; }
         public string Quantity { get; set; }
