@@ -118,14 +118,14 @@ namespace ControlledDrugReportGenerator.Class
                     }
                 }
 
-                var findOrder = orderList.First(o => o.OrderID == report.OrderID);
+                var findOrder = orderList.FirstOrDefault(o => o.OrderID == report.OrderID);
                 if (findOrder != null)
                 {
                     report.Dose = findOrder.Dose;
                 }
                 else
                 {
-                    Console.Write("於醫囑內找不到對應資料");
+                    report.Dose = "於醫囑內找不到對應資料";
                 }
                 stationList.Add(report);
             }
