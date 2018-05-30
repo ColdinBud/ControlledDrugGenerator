@@ -93,6 +93,14 @@ namespace ControlledDrugReportGenerator.Class
             wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
                 Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
+            /*
+            bool userDidntCancel = excelApp.Dialogs[Microsoft.Office.Interop.Excel.XlBuiltInDialog.xlDialogPrint].Show(Type.Missing,
+    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            */
+            
+
             wBook.Close(false, Type.Missing, Type.Missing);
             excelApp.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(wBook);
@@ -193,9 +201,11 @@ namespace ControlledDrugReportGenerator.Class
                         string dosage = Regex.Match(groupData[((curPage - 1) * 10 + count) - 1].Dose, @"-?\d+(?:\.\d+)?").ToString();
                         string orderUnit = groupData[((curPage - 1) * 10) + count - 1].Dose.Substring(dosage.Length);
 
+                        string orderID = groupData[((curPage - 1) * 10 + count) - 1].OrderID.Split('-')[0];
+
                         excelApp.Cells[curLine + i, 1] = (curPage - 1) * 10 + count;
                         excelApp.Cells[curLine + i, 2] = "病歷號碼：" + groupData[((curPage - 1) * 10 + count) - 1].PatientID;
-                        excelApp.Cells[curLine + i, 3] = "處方號碼：" + dateFormat + "-" + groupData[((curPage - 1) * 10 + count) - 1].OrderID;
+                        excelApp.Cells[curLine + i, 3] = "處方號碼：" + dateFormat + "-" + orderID + "-" + groupData[((curPage - 1) * 10 + count) - 1].PatientID;
                         excelApp.Cells[curLine + i, 4] = groupData[((curPage - 1) * 10 + count) - 1].Quantity;
                         //excelApp.Cells[curLine + i, 5] = groupData[((curPage - 1) * 10 + count) - 1].EndDose;
 
@@ -230,51 +240,26 @@ namespace ControlledDrugReportGenerator.Class
                            Excel.XlBorderWeight.xlThin, Excel.XlColorIndex.xlColorIndexAutomatic);
                            */
 
-                        wSheet.get_Range("A" + (curLine + i).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("A" + (curLine + i).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("A" + (curLine + i).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("A" + (curLine + i).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
+                        for (int col = 0; col < 4; col++)
+                        {
+                            string colcount = ((char)('A' + col)).ToString();
 
-                        wSheet.get_Range("A" + (curLine + i + 3).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("A" + (curLine + i + 3).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
-
-
-                        wSheet.get_Range("B" + (curLine + i).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("B" + (curLine + i).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("B" + (curLine + i).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("B" + (curLine + i).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("B" + (curLine + i + 3).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("B" + (curLine + i + 3).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
-
-                        wSheet.get_Range("C" + (curLine + i).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("C" + (curLine + i).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("C" + (curLine + i).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("C" + (curLine + i).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("C" + (curLine + i + 3).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("C" + (curLine + i + 3).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
-
-                        wSheet.get_Range("D" + (curLine + i).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("D" + (curLine + i).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("D" + (curLine + i).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("D" + (curLine + i).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("D" + (curLine + i + 3).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("D" + (curLine + i + 3).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
+                            wSheet.get_Range(colcount + (curLine + i).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                            wSheet.get_Range(colcount + (curLine + i).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
+                            wSheet.get_Range(colcount + (curLine + i).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                            wSheet.get_Range(colcount + (curLine + i).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
+                            wSheet.get_Range(colcount + (curLine + i + 3).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
+                            wSheet.get_Range(colcount + (curLine + i + 3).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
+                        }
 
                         count++;
                     }
-
-                    /*
-                    excelApp.Cells[curLine + 41, 1] = "";
-                    excelApp.Cells[curLine + 41, 2] = "";
-                    excelApp.Cells[curLine + 41, 3] = "";
-                    excelApp.Cells[curLine + 41, 4] = "";
-                    excelApp.Cells[curLine + 41, 5] = "";
-                    */
-
-                    //excelApp.Cells[curLine + 45, 1] = "";
-                    //excelApp.Cells[curLine + 45, 2] = "";
-                    //excelApp.Cells[curLine + 45, 3] = "";
-                    //excelApp.Cells[curLine + 45, 3] = "";
 
                     excelApp.Cells[curLine + 46, 1] = "";
                     excelApp.Cells[curLine + 46, 2] = "";
@@ -317,16 +302,18 @@ namespace ControlledDrugReportGenerator.Class
                     int itemCount = groupData.Count() % 10;
                     for (int i = 5; i < itemCount * 4 + 5; i += 4)
                     {
-                        string[] dateTime = groupData[((curPage - 1) * 10 + listCount) - 1].TransactionDate.Split(' ')[0].Split('/');
+                        string[] dateTime = groupData[((curPage - 1) * 10 + listCount) - 1].OrderStartTime.Split(' ')[0].Split('/');
                         string dateFormat = dateTime[0] + (dateTime[1].Length == 1 ? "0" + dateTime[1] : dateTime[1]) +
                             (dateTime[2].Length == 1 ? "0" + dateTime[2] : dateTime[2]);
 
                         string dosage = Regex.Match(groupData[((curPage - 1) * 10 + listCount) - 1].Dose, @"-?\d+(?:\.\d+)?").ToString();
                         string orderUnit = groupData[((curPage - 1) * 10) + listCount - 1].Dose.Substring(dosage.Length);
 
+                        string orderID = groupData[((curPage - 1) * 10 + listCount) - 1].OrderID.Split('-')[0];
+
                         excelApp.Cells[curLine + i, 1] = (curPage - 1) * 10 + listCount;
                         excelApp.Cells[curLine + i, 2] = "病歷號碼：" + groupData[((curPage - 1) * 10 + listCount) - 1].PatientID;
-                        excelApp.Cells[curLine + i, 3] = "處方號碼：" + dateFormat + "-" + groupData[((curPage - 1) * 10 + listCount) - 1].OrderID;
+                        excelApp.Cells[curLine + i, 3] = "處方號碼：" + dateFormat + "-" + orderID + "-" + groupData[((curPage - 1) * 10 + listCount) - 1].PatientID;
                         excelApp.Cells[curLine + i, 4] = groupData[((curPage - 1) * 10 + listCount) - 1].Quantity;
                         //excelApp.Cells[curLine + i, 5] = groupData[((curPage - 1) * 10 + listCount) - 1].EndDose;
 
@@ -364,35 +351,24 @@ namespace ControlledDrugReportGenerator.Class
                         //cellRange.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
                         //cellRange.Borders.Weight = Excel.XlBorderWeight.xlThin;
 
-                        wSheet.get_Range("A" + (curLine + i).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("A" + (curLine + i).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("A" + (curLine + i).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("A" + (curLine + i).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
+                        
+                        for (int col = 0; col < 4; col++)
+                        {
+                            string colcount = ((char)('A' + col)).ToString();
 
-                        wSheet.get_Range("A" + (curLine + i + 3).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("A" + (curLine + i + 3).ToString(), "A" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
-
-
-                        wSheet.get_Range("B" + (curLine + i).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("B" + (curLine + i).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("B" + (curLine + i).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("B" + (curLine + i).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("B" + (curLine + i + 3).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("B" + (curLine + i + 3).ToString(), "B" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
-
-                        wSheet.get_Range("C" + (curLine + i).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("C" + (curLine + i).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("C" + (curLine + i).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("C" + (curLine + i).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("C" + (curLine + i + 3).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("C" + (curLine + i + 3).ToString(), "C" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
-
-                        wSheet.get_Range("D" + (curLine + i).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("D" + (curLine + i).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("D" + (curLine + i).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("D" + (curLine + i).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
-                        wSheet.get_Range("D" + (curLine + i + 3).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
-                        wSheet.get_Range("D" + (curLine + i + 3).ToString(), "D" + (curLine + i + 3)).Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
+                            wSheet.get_Range(colcount + (curLine + i).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeLeft].LineStyle = Excel.XlLineStyle.xlContinuous;
+                            wSheet.get_Range(colcount + (curLine + i).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeLeft].Weight = Excel.XlBorderWeight.xlThin;
+                            wSheet.get_Range(colcount + (curLine + i).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                            wSheet.get_Range(colcount + (curLine + i).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeRight].Weight = Excel.XlBorderWeight.xlThin;
+                            wSheet.get_Range(colcount + (curLine + i + 3).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeBottom].LineStyle = Excel.XlLineStyle.xlContinuous;
+                            wSheet.get_Range(colcount + (curLine + i + 3).ToString(), colcount + (curLine + i + 3)).
+                                Borders[Excel.XlBordersIndex.xlEdgeBottom].Weight = Excel.XlBorderWeight.xlThin;
+                        }
 
                         listCount++;
                     }
@@ -405,7 +381,7 @@ namespace ControlledDrugReportGenerator.Class
                 excelApp.Cells[curLine + 1, 1] = "補藥量：" + ng.Total + " " + groupData[0].QuantityUnit;
                 wSheet.get_Range($"A{curLine + 2}", $"B{curLine + 2}").Merge(wSheet.get_Range($"A{curLine + 2}", $"B{curLine + 2}").MergeCells);
 
-                excelApp.Cells[curLine + 1, 3] = "護理長/用藥監督人：";
+                //excelApp.Cells[curLine + 1, 3] = "護理長/用藥監督人：";
                 excelApp.Cells[curLine + 3, 1] = "藥師：";
                 excelApp.Cells[curLine + 3, 3] = "調劑日期：" + DateTime.Now.ToString("yyyy/MM/dd HH:mm"); ;
                 excelApp.Cells[curLine + 3, 4] = "領藥人：";
