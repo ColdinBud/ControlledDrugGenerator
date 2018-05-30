@@ -176,20 +176,20 @@ namespace ControlledDrugReportGenerator.Class
                     excelApp.Cells[curLine + 4, 4] = "取用量";
                     //excelApp.Cells[curLine + 4, 5] = "結存量";
 
-                    string RangeCenter = $"A{curLine}:E{curLine + 1}";
+                    string RangeCenter = $"A{curLine}:D{curLine + 1}";
                     wSheet.get_Range(RangeCenter).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
 
                     excelApp.Cells[curLine, 1] = "國立臺灣大學醫學院附設醫院";
-                    wSheet.get_Range($"A{curLine}", $"E{curLine}").Merge(wSheet.get_Range($"A{curLine}", $"E{curLine}").MergeCells);
+                    wSheet.get_Range($"A{curLine}", $"D{curLine}").Merge(wSheet.get_Range($"A{curLine}", $"D{curLine}").MergeCells);
 
-                    excelApp.Cells[curLine + 1, 1] = "非注射用1 - 3級管制藥品使用紀錄表";
-                    wSheet.get_Range($"A{curLine + 1}", $"E{curLine + 1}").Merge(wSheet.get_Range($"A{curLine + 1}", $"E{curLine + 1}").MergeCells);
+                    excelApp.Cells[curLine + 1, 1] = "非注射用1-3級管制藥品使用紀錄表";
+                    wSheet.get_Range($"A{curLine + 1}", $"D{curLine + 1}").Merge(wSheet.get_Range($"A{curLine + 1}", $"D{curLine + 1}").MergeCells);
 
                     excelApp.Cells[curLine + 2, 1] = "使用單位：" + groupData[0].UsingUnit;
-                    wSheet.get_Range($"A{curLine + 2}", $"E{curLine + 2}").Merge(wSheet.get_Range($"A{curLine + 2}", $"E{curLine + 2}").MergeCells);
+                    wSheet.get_Range($"A{curLine + 2}", $"D{curLine + 2}").Merge(wSheet.get_Range($"A{curLine + 2}", $"D{curLine + 2}").MergeCells);
 
                     excelApp.Cells[curLine + 3, 1] = "藥品名稱：" + groupData[0].MedName;
-                    wSheet.get_Range($"A{curLine + 3}", $"E{curLine + 3}").Merge(wSheet.get_Range($"A{curLine + 3}", $"E{curLine + 3}").MergeCells);
+                    wSheet.get_Range($"A{curLine + 3}", $"D{curLine + 3}").Merge(wSheet.get_Range($"A{curLine + 3}", $"D{curLine + 3}").MergeCells);
 
                     int count = 1;
                     for (int i = 5; i < 45; i += 4)
@@ -266,7 +266,8 @@ namespace ControlledDrugReportGenerator.Class
                     excelApp.Cells[curLine + 46, 3] = "";
                     //int pageSetup = wSheet.PageSetup.Pages.Count;
                     excelApp.Cells[curLine + 46, 4] = $"第{curPage}頁, 共{groupData.Count() / 10 + 1}頁";
-                    wSheet.get_Range($"D{curLine + 46}", $"E{curLine + 46}").Merge(wSheet.get_Range($"D{curLine + 46}", $"E{curLine + 46}").MergeCells);
+                    wSheet.get_Range($"C{curLine + 46}", $"D{curLine + 46}").Merge(wSheet.get_Range($"C{curLine + 46}", $"D{curLine + 46}").MergeCells);
+                    wSheet.get_Range($"C{curLine + 46}:D{curLine + 46}").HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
 
                     curPage++;
                 }
@@ -283,20 +284,20 @@ namespace ControlledDrugReportGenerator.Class
                     excelApp.Cells[curLine + 4, 4] = "取用量";
                     //excelApp.Cells[curLine + 4, 5] = "結存量";
 
-                    string rcenter = $"A{curLine}:E{curLine + 1}";
+                    string rcenter = $"A{curLine}:D{curLine + 1}";
                     wSheet.get_Range(rcenter).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
 
                     excelApp.Cells[curLine, 1] = "國立臺灣大學醫學院附設醫院";
-                    wSheet.get_Range($"A{curLine}", $"E{curLine}").Merge(wSheet.get_Range($"A{curLine}", $"E{curLine}").MergeCells);
+                    wSheet.get_Range($"A{curLine}", $"D{curLine}").Merge(wSheet.get_Range($"A{curLine}", $"D{curLine}").MergeCells);
 
-                    excelApp.Cells[curLine + 1, 1] = "非注射用1 - 3級管制藥品使用紀錄表";
-                    wSheet.get_Range($"A{curLine + 1}", $"E{curLine + 1}").Merge(wSheet.get_Range($"A{curLine + 1}", $"E{curLine + 1}").MergeCells);
+                    excelApp.Cells[curLine + 1, 1] = "非注射用1-3級管制藥品使用紀錄表";
+                    wSheet.get_Range($"A{curLine + 1}", $"D{curLine + 1}").Merge(wSheet.get_Range($"A{curLine + 1}", $"D{curLine + 1}").MergeCells);
 
                     excelApp.Cells[curLine + 2, 1] = "使用單位：" + groupData[0].UsingUnit;
-                    wSheet.get_Range($"A{curLine + 2}", $"E{curLine + 2}").Merge(wSheet.get_Range($"A{curLine + 2}", $"E{curLine + 2}").MergeCells);
+                    wSheet.get_Range($"A{curLine + 2}", $"D{curLine + 2}").Merge(wSheet.get_Range($"A{curLine + 2}", $"D{curLine + 2}").MergeCells);
 
                     excelApp.Cells[curLine + 3, 1] = "藥品名稱：" + groupData[0].MedName;
-                    wSheet.get_Range($"A{curLine + 3}", $"E{curLine + 3}").Merge(wSheet.get_Range($"A{curLine + 3}", $"E{curLine + 3}").MergeCells);
+                    wSheet.get_Range($"A{curLine + 3}", $"D{curLine + 3}").Merge(wSheet.get_Range($"A{curLine + 3}", $"D{curLine + 3}").MergeCells);
 
                     int listCount = 1;
                     int itemCount = groupData.Count() % 10;
@@ -386,8 +387,9 @@ namespace ControlledDrugReportGenerator.Class
                 excelApp.Cells[curLine + 3, 3] = "調劑日期：" + DateTime.Now.ToString("yyyy/MM/dd HH:mm"); ;
                 excelApp.Cells[curLine + 3, 4] = "領藥人：";
                 excelApp.Cells[curLine + 5, 4] = $"第{curPage}頁, 共{groupData.Count() / 10 + 1}頁";
-                wSheet.get_Range($"D{curLine + 5}", $"E{curLine + 5}").Merge(wSheet.get_Range($"D{curLine + 5}", $"E{curLine + 5}").MergeCells);
-
+                wSheet.get_Range($"C{curLine + 5}", $"D{curLine + 5}").Merge(wSheet.get_Range($"C{curLine + 5}", $"D{curLine + 5}").MergeCells);
+                wSheet.get_Range($"C{curLine + 5}:D{curLine + 5}").HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                
                 wRange = wSheet.Range[wSheet.Cells[1, 1], wSheet.Cells[curLine + 6, 5]];
                 wRange.Columns.AutoFit();
 
