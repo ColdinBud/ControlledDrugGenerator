@@ -99,6 +99,8 @@ namespace ControlledDrugReportGenerator.View
             string stationFileName = label1.Text.Substring(label1.Text.LastIndexOf("\\") + 1);
             string orderFileName = label2.Text.Substring(label2.Text.LastIndexOf("\\") + 1);
 
+            Directory.CreateDirectory($"{Properties.Settings.Default.FilePath}\\{dateFormat}\\原始資料");
+
             File.Copy(label1.Text, $"{Properties.Settings.Default.FilePath}\\{dateFormat}\\原始資料\\{dateTime}-{stationFileName}", false);
             File.Copy(label2.Text, $"{Properties.Settings.Default.FilePath}\\{dateFormat}\\原始資料\\{dateTime}-{orderFileName}", false);
 
