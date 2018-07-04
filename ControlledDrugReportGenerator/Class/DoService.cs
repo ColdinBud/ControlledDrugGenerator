@@ -101,8 +101,15 @@ namespace ControlledDrugReportGenerator.Class
                         System.IO.File.Move(orderFilePath, filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + nowTime + orderFileName);
                     }
 
-                    result += new ExcelFormatter().CreateTotal(stationList);
-                    result += new ExcelFormatter().FormatExcel(stationList);
+                    if (stationList.Count > 1)
+                    {
+                        result += new ExcelFormatter().CreateTotal(stationList);
+                        result += new ExcelFormatter().FormatExcel(stationList);
+                    }
+                    else
+                    {
+                        result += "沒有更新資料";
+                    }
                 }
 
             }

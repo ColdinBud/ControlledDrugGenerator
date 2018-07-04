@@ -109,8 +109,15 @@ namespace ControlledDrugReportGenerator.View
             string currentTime = DateTime.Now.ToString("HH:mm:ss");
 
             txtMessage.Text += $"{currentTime}:    資料處理中，請稍後...\r\n";
-            txtMessage.Text += $"{currentTime}:    {new ExcelFormatter().CreateTotal(stationList)}";
-            txtMessage.Text += $"{currentTime}:    {new ExcelFormatter().FormatExcel(stationList)}";
+            if (stationList.Count > 1)
+            {
+                txtMessage.Text += $"{currentTime}:    {new ExcelFormatter().CreateTotal(stationList)}";
+                txtMessage.Text += $"{currentTime}:    {new ExcelFormatter().FormatExcel(stationList)}";
+            }
+            else
+            {
+                txtMessage.Text += "沒有更新資料";
+            }
             //button3.Enabled = true;
         }
     }

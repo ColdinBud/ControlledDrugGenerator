@@ -156,8 +156,8 @@ namespace ControlledDrugReportGenerator.Class
                 printPageSetup.Orientation = Excel.XlPageOrientation.xlPortrait;
                 printPageSetup.FitToPagesWide = 1;
                 printPageSetup.FitToPagesTall = 1;
-                printPageSetup.LeftMargin = excelApp.InchesToPoints(0.7);
-                printPageSetup.RightMargin = excelApp.InchesToPoints(0.3);
+                printPageSetup.LeftMargin = excelApp.InchesToPoints(0.5);
+                printPageSetup.RightMargin = excelApp.InchesToPoints(0.5);
                 printPageSetup.TopMargin = excelApp.InchesToPoints(0.75);
                 printPageSetup.BottomMargin = excelApp.InchesToPoints(0.7);
                 printPageSetup.HeaderMargin = excelApp.InchesToPoints(0.3);
@@ -210,13 +210,36 @@ namespace ControlledDrugReportGenerator.Class
                         //excelApp.Cells[curLine + i, 5] = groupData[((curPage - 1) * 10 + count) - 1].EndDose;
 
                         excelApp.Cells[curLine + i + 1, 1] = "";
-                        excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + groupData[((curPage - 1) * 10 + count) - 1].PatientName;
+                        //excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + groupData[((curPage - 1) * 10 + count) - 1].PatientName;
                         excelApp.Cells[curLine + i + 1, 3] = "使用日期：" + groupData[((curPage - 1) * 10 + count) - 1].TransactionDate;
                         excelApp.Cells[curLine + i + 1, 4] = "";
                         //excelApp.Cells[curLine + i + 1, 5] = "";
 
+                        //KYAUK, SENG LAW
+                        wSheet.get_Range($"B{curLine + i + 1}", $"B{curLine + i + 2}")
+                            .Merge(wSheet.get_Range($"B{curLine + i + 1}", $"B{curLine + i + 2}").MergeCells);
+                        wSheet.get_Range($"B{curLine + i + 1}", $"B{curLine + i + 2}").VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
+                        string patientName = groupData[((curPage - 1) * 10 + count) - 1].PatientName;
+
+                        if (patientName.Length > 15)
+                        {
+                            excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + patientName.Substring(0, 15);
+                            wRange = wSheet.Range[wSheet.Cells[curLine + i + 1, 2], wSheet.Cells[curLine + i + 2, 2]];
+
+                            printPageSetup.LeftMargin = excelApp.InchesToPoints(0.3);
+                            printPageSetup.RightMargin = excelApp.InchesToPoints(0.3);
+
+                            wRange.Columns.AutoFit();
+
+                            excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + patientName.Substring(0, 15) + "\r\n" + patientName.Substring(15);
+                        }
+                        else
+                        {
+                            excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + patientName;
+                        }
+
                         excelApp.Cells[curLine + i + 2, 1] = "";
-                        excelApp.Cells[curLine + i + 2, 2] = "";
+                        //excelApp.Cells[curLine + i + 2, 2] = "";
                         excelApp.Cells[curLine + i + 2, 3] = "處方劑量：" + dosage + " " + orderUnit;
                         excelApp.Cells[curLine + i + 2, 4] = "";
                         //excelApp.Cells[curLine + i + 2, 5] = "";
@@ -319,13 +342,36 @@ namespace ControlledDrugReportGenerator.Class
                         //excelApp.Cells[curLine + i, 5] = groupData[((curPage - 1) * 10 + listCount) - 1].EndDose;
 
                         excelApp.Cells[curLine + i + 1, 1] = "";
-                        excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + groupData[((curPage - 1) * 10 + listCount) - 1].PatientName;
+                        //excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + groupData[((curPage - 1) * 10 + listCount) - 1].PatientName;
                         excelApp.Cells[curLine + i + 1, 3] = "使用日期：" + groupData[((curPage - 1) * 10 + listCount) - 1].TransactionDate;
                         excelApp.Cells[curLine + i + 1, 4] = "";
                         //excelApp.Cells[curLine + i + 1, 5] = "";
 
+                        //KYAUK, SENG LAW
+                        wSheet.get_Range($"B{curLine + i + 1}", $"B{curLine + i + 2}")
+                            .Merge(wSheet.get_Range($"B{curLine + i + 1}", $"B{curLine + i + 2}").MergeCells);
+                        wSheet.get_Range($"B{curLine + i + 1}", $"B{curLine + i + 2}").VerticalAlignment = Excel.XlVAlign.xlVAlignTop;
+                        string patientName = groupData[((curPage - 1) * 10 + listCount) - 1].PatientName;
+
+                        if (patientName.Length > 15)
+                        {
+                            excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + patientName.Substring(0, 15);
+                            wRange = wSheet.Range[wSheet.Cells[curLine + i + 1, 2], wSheet.Cells[curLine + i + 2, 2]];
+
+                            printPageSetup.LeftMargin = excelApp.InchesToPoints(0.3);
+                            printPageSetup.RightMargin = excelApp.InchesToPoints(0.3);
+
+                            wRange.Columns.AutoFit();
+
+                            excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + patientName.Substring(0, 15) + "\r\n" + patientName.Substring(15);
+                        }
+                        else
+                        {
+                            excelApp.Cells[curLine + i + 1, 2] = "病人姓名：" + patientName;
+                        }
+
                         excelApp.Cells[curLine + i + 2, 1] = "";
-                        excelApp.Cells[curLine + i + 2, 2] = "";
+                        //excelApp.Cells[curLine + i + 2, 2] = "";
                         excelApp.Cells[curLine + i + 2, 3] = "處方劑量：" + dosage + " " + orderUnit;
                         excelApp.Cells[curLine + i + 2, 4] = "";
                         //excelApp.Cells[curLine + i + 2, 5] = "";
@@ -379,8 +425,9 @@ namespace ControlledDrugReportGenerator.Class
 
                 curLine = groupData.Count() % 10 == 0 ? curLine + 47 : curLine + ((groupData.Count() % 10) * 4 + 5);
                 //curLine = curLine + ((groupData.Count() % 10) * 4 + 5);
-                excelApp.Cells[curLine + 1, 1] = "補藥量：" + ng.Total + " " + groupData[0].QuantityUnit;
+                wSheet.get_Range($"A{curLine + 1}", $"B{curLine + 1}").Merge(wSheet.get_Range($"A{curLine + 1}", $"B{curLine + 1}").MergeCells);
                 wSheet.get_Range($"A{curLine + 2}", $"B{curLine + 2}").Merge(wSheet.get_Range($"A{curLine + 2}", $"B{curLine + 2}").MergeCells);
+                excelApp.Cells[curLine + 1, 1] = "補藥量：" + ng.Total + " " + groupData[0].QuantityUnit;
 
                 //excelApp.Cells[curLine + 1, 3] = "護理長/用藥監督人：";
                 excelApp.Cells[curLine + 3, 1] = "藥師：";
