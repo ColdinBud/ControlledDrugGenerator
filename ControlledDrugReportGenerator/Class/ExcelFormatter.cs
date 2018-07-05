@@ -13,17 +13,6 @@ namespace ControlledDrugReportGenerator.Class
     {
         public string CreateTotal(List<ReportData> stationList)
         {
-            var nameGroup = from s in stationList
-                            group s by new { s.MedID, s.MedName, s.QuantityUnit } into g
-                            select new
-                            {
-                                MedID = g.Key.MedID,
-                                MedName = g.Key.MedName,
-                                Unit = g.Key.QuantityUnit,
-                                Num = g.Count(),
-                                Total = g.Sum(s => int.Parse(s.Quantity))
-                            };
-
             string currentDate = DateTime.Now.ToString("yyyyMMdd");
             string currentDateTime = DateTime.Now.ToString("HHmm");
 
@@ -46,44 +35,65 @@ namespace ControlledDrugReportGenerator.Class
             printPageSetup.PaperSize = Excel.XlPaperSize.xlPaperA4;
             printPageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
 
-            excelApp.Cells[1, 1] = "No.";
-            excelApp.Cells[1, 2] = "藥品名稱";
-            excelApp.Cells[1, 3] = "藥品八碼";
-            excelApp.Cells[1, 4] = "取藥筆數";
-            excelApp.Cells[1, 5] = "總取用量";
-            excelApp.Cells[1, 6] = "取用單位";
+            excelApp.Cells[1, 2] = "非注射用1-3級管制藥品使用紀錄總表";
+            excelApp.Cells[2, 2] = "日期: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-            int lineCount = 2;
-            foreach (var ng in nameGroup)
+            if (stationList.Count > 1)
             {
-                var groupData = (from g in stationList
-                                 where g.MedID == ng.MedID
-                                 select g).ToArray();
+                var nameGroup = from s in stationList
+                                group s by new { s.MedID, s.MedName, s.QuantityUnit } into g
+                                select new
+                                {
+                                    MedID = g.Key.MedID,
+                                    MedName = g.Key.MedName,
+                                    Unit = g.Key.QuantityUnit,
+                                    Num = g.Count(),
+                                    Total = g.Sum(s => int.Parse(s.Quantity))
+                                };
 
-                excelApp.Cells[lineCount, 1] = (lineCount - 1);
-                excelApp.Cells[lineCount, 2] = ng.MedName;
-                excelApp.Cells[lineCount, 3] = ng.MedID;
-                excelApp.Cells[lineCount, 4] = ng.Num;
-                excelApp.Cells[lineCount, 5] = ng.Total;
-                excelApp.Cells[lineCount, 6] = ng.Unit;
+                excelApp.Cells[3, 1] = "No.";
+                excelApp.Cells[3, 2] = "藥品名稱";
+                excelApp.Cells[3, 3] = "藥品八碼";
+                excelApp.Cells[3, 4] = "取藥筆數";
+                excelApp.Cells[3, 5] = "總取用量";
+                excelApp.Cells[3, 6] = "取用單位";
 
-                lineCount++;
-
-                foreach (var group in groupData)
+                int lineCount = 4;
+                foreach (var ng in nameGroup)
                 {
-                    if (group.Dose.Equals("於醫囑內找不到對應資料"))
+                    var groupData = (from g in stationList
+                                     where g.MedID == ng.MedID
+                                     select g).ToArray();
+
+                    excelApp.Cells[lineCount, 1] = (lineCount - 1);
+                    excelApp.Cells[lineCount, 2] = ng.MedName;
+                    excelApp.Cells[lineCount, 3] = ng.MedID;
+                    excelApp.Cells[lineCount, 4] = ng.Num;
+                    excelApp.Cells[lineCount, 5] = ng.Total;
+                    excelApp.Cells[lineCount, 6] = ng.Unit;
+
+                    lineCount++;
+
+                    foreach (var group in groupData)
                     {
-                        excelApp.Cells[lineCount, 1] = (lineCount - 1);
-                        excelApp.Cells[lineCount, 2] = ng.MedID + "-" +group.OrderID +　" - 找不到對應的醫囑資料";
-                        lineCount++;
+                        if (group.Dose.Equals("於醫囑內找不到對應資料"))
+                        {
+                            excelApp.Cells[lineCount, 1] = (lineCount - 1);
+                            excelApp.Cells[lineCount, 2] = ng.MedID + "-" + group.OrderID + " - 找不到對應的醫囑資料";
+                            lineCount++;
+                        }
                     }
                 }
+
+                wSheet.get_Range($"A3", $"F{lineCount - 1}").Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                wRange = wSheet.Range[wSheet.Cells[1, 1], wSheet.Cells[lineCount - 1, 6]];
+
+                wRange.Columns.AutoFit();
             }
-
-            wSheet.get_Range($"A1", $"F{lineCount - 1}").Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-            wRange = wSheet.Range[wSheet.Cells[1, 1], wSheet.Cells[lineCount - 1, 6]];
-
-            wRange.Columns.AutoFit();
+            else
+            {
+                excelApp.Cells[3, 2] = "無管制藥取用紀錄";
+            }
 
             string pathFile = $"{Properties.Settings.Default.FilePath}\\{currentDate}\\{currentDate}-{currentDateTime}-總表";
 
