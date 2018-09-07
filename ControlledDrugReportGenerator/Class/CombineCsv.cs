@@ -86,7 +86,7 @@ namespace ControlledDrugReportGenerator.Class
                         case 1:
                             report.MedID = stationCells[c];
                             break;
-                        case 5:
+                        case 4:
                             report.UsingUnit = stationCells[c];
                             break;
                         case 9:

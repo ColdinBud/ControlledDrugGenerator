@@ -110,7 +110,7 @@ namespace ControlledDrugReportGenerator.View
 
             txtMessage.Text += $"{currentTime}:    資料處理中，請稍後...\r\n";
             txtMessage.Text += $"{currentTime}:    {new ExcelFormatter().CreateTotal(stationList)}";
-            if (stationList.Count > 1)
+            if (stationList.Count > 0 && stationList[0].MedID != null)
             {
                 txtMessage.Text += $"{currentTime}:    {new ExcelFormatter().FormatExcel(stationList)}";
             }

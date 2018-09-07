@@ -11,7 +11,7 @@ namespace ControlledDrugReportGenerator.Class
 {
     class ExcelFormatter
     {
-        public string CreateTotal(List<ReportData> stationList)
+        public string CreateTotal(List<ReportData> stationList, string fileName = "")
         {
             string currentDate = DateTime.Now.ToString("yyyyMMdd");
             string currentDateTime = DateTime.Now.ToString("HHmm");
@@ -34,11 +34,14 @@ namespace ControlledDrugReportGenerator.Class
             var printPageSetup = wSheet.PageSetup;
             printPageSetup.PaperSize = Excel.XlPaperSize.xlPaperA4;
             printPageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
+            //printPageSetup.LeftMargin = excelApp.InchesToPoints(0.25);
+            //printPageSetup.RightMargin = excelApp.InchesToPoints(0.25);
+            printPageSetup.FitToPagesWide = 1;
 
             excelApp.Cells[1, 2] = "非注射用1-3級管制藥品使用紀錄總表";
             excelApp.Cells[2, 2] = "日期: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-            if (stationList.Count > 1)
+            if (stationList.Count > 0 && stationList[0].MedID != null)
             {
                 var nameGroup = from s in stationList
                                 group s by new { s.MedID, s.MedName, s.QuantityUnit } into g
@@ -50,6 +53,11 @@ namespace ControlledDrugReportGenerator.Class
                                     Num = g.Count(),
                                     Total = g.Sum(s => int.Parse(s.Quantity))
                                 };
+
+
+                excelApp.Cells[2, 4] = "使用單位: " + stationList[0].UsingUnit;
+                wSheet.get_Range("C2", "E2").Merge(wSheet.get_Range("C2", "E2").MergeCells);
+                
 
                 excelApp.Cells[3, 1] = "No.";
                 excelApp.Cells[3, 2] = "藥品名稱";
@@ -65,7 +73,7 @@ namespace ControlledDrugReportGenerator.Class
                                      where g.MedID == ng.MedID
                                      select g).ToArray();
 
-                    excelApp.Cells[lineCount, 1] = (lineCount - 1);
+                    excelApp.Cells[lineCount, 1] = (lineCount - 3);
                     excelApp.Cells[lineCount, 2] = ng.MedName;
                     excelApp.Cells[lineCount, 3] = ng.MedID;
                     excelApp.Cells[lineCount, 4] = ng.Num;
@@ -95,21 +103,20 @@ namespace ControlledDrugReportGenerator.Class
                 excelApp.Cells[3, 2] = "無管制藥取用紀錄";
             }
 
-            string pathFile = $"{Properties.Settings.Default.FilePath}\\{currentDate}\\{currentDate}-{currentDateTime}-總表";
+            string areaName = "";
+            if (!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(fileName.Split(' ')[0]))
+            {
+                areaName = fileName.Split(' ')[0].Substring(16);
+            }
+
+            string pathFile = $"{Properties.Settings.Default.FilePath}\\{currentDate}\\{currentDate}-{currentDateTime}-{areaName}-總表";
 
             wBook.SaveAs(pathFile, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
-            wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            //wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
+            //    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
-            /*
-            bool userDidntCancel = excelApp.Dialogs[Microsoft.Office.Interop.Excel.XlBuiltInDialog.xlDialogPrint].Show(Type.Missing,
-    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-            */
-            
 
             wBook.Close(false, Type.Missing, Type.Missing);
             excelApp.Quit();
@@ -123,7 +130,7 @@ namespace ControlledDrugReportGenerator.Class
             return "已建立 " + pathFile + "\r\n";
         }
 
-        public string FormatExcel(List<ReportData> stationList)
+        public string FormatExcel(List<ReportData> stationList, string fileName = "")
         {
             string result = "";
 
@@ -453,8 +460,8 @@ namespace ControlledDrugReportGenerator.Class
                 //string savePdfPath = $"{Properties.Settings.Default.FilePath}\\{currentDate}\\{currentDate}-{currentDateTime}{groupData[0].MedID}";
 
 
-                wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
-                    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                //wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
+                //    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
 
                 //wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
@@ -466,7 +473,13 @@ namespace ControlledDrugReportGenerator.Class
                 wSheet = null;
             }
 
-            string pathFile = $"{Properties.Settings.Default.FilePath}\\{currentDate}\\{currentDate}-{currentDateTime}-非注射用1-3級管制藥品使用紀錄";
+            string areaName = "";
+            if (!string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(fileName.Split(' ')[0]))
+            {
+                areaName = fileName.Split(' ')[0].Substring(16);
+            }
+
+            string pathFile = $"{Properties.Settings.Default.FilePath}\\{currentDate}\\{currentDate}-{currentDateTime}-{areaName}-非注射用1-3級管制藥品使用紀錄";
 
             wBook.SaveAs(pathFile, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
