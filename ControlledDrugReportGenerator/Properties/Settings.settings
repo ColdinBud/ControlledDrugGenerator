@@ -20,5 +20,8 @@
     <Setting Name="ActivePrinter" Type="System.String" Scope="Application">
       <Value Profile="(Default)">HP ENVY 4500 Series Class Driver</Value>
     </Setting>
+    <Setting Name="MaxDay" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
