@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,6 +20,8 @@ namespace ControlledDrugReportGenerator.View
         {
             InitializeComponent();
         }
+
+        Thread combineListThread;
 
         private void cfgButton_Click(object sender, EventArgs e)
         {

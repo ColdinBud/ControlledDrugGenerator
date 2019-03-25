@@ -114,8 +114,11 @@ namespace ControlledDrugReportGenerator.Class
             wBook.SaveAs(pathFile, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing,
                 Excel.XlSaveAsAccessMode.xlNoChange, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
-            //wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
-            //    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            if (Properties.Settings.Default.PrintOrNoPrint.Equals("Print"))
+            {
+                wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            }
 
 
             wBook.Close(false, Type.Missing, Type.Missing);
@@ -457,18 +460,11 @@ namespace ControlledDrugReportGenerator.Class
                 wRange = wSheet.Range[wSheet.Cells[1, 1], wSheet.Cells[curLine + 6, 5]];
                 wRange.Columns.AutoFit();
 
-                //string savePdfPath = $"{Properties.Settings.Default.FilePath}\\{currentDate}\\{currentDate}-{currentDateTime}{groupData[0].MedID}";
-
-
-                //wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
-                //    Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-
-
-                //wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-                //wSheet.PageSetup.Application.ActivePrinter = Properties.Settings.Default.ActivePrinter;
-
-                //wSheet.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, savePdfPath);
-                //result += "已建立 " + savePdfPath + "\r\n";
+                if (Properties.Settings.Default.PrintOrNoPrint.Equals("Print"))
+                {
+                    wSheet.PrintOutEx(Type.Missing, Type.Missing, Type.Missing, Type.Missing, Properties.Settings.Default.ActivePrinter,
+                        Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                }
 
                 wSheet = null;
             }

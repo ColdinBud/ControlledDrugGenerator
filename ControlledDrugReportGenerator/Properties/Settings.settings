@@ -6,7 +6,7 @@
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="FilePath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">I:\Work\Regain\report\管制藥使用紀錄表</Value>
+      <Value Profile="(Default)">D:\report\管制藥使用紀錄表</Value>
     </Setting>
     <Setting Name="SourcePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">I:\Work\Regain\source</Value>
@@ -22,6 +22,18 @@
     </Setting>
     <Setting Name="MaxDay" Type="System.String" Scope="Application">
       <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="DeviceFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">裝置報表</Value>
+    </Setting>
+    <Setting Name="LabelFileName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">標籤報表</Value>
+    </Setting>
+    <Setting Name="RunCompareTime" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">12:18</Value>
+    </Setting>
+    <Setting Name="PrintOrNoPrint" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Print</Value>
     </Setting>
   </Settings>
 </SettingsFile>

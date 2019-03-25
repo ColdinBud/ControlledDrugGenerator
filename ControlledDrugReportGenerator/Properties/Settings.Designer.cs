@@ -34,7 +34,7 @@ namespace ControlledDrugReportGenerator.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("I:\\Work\\Regain\\report\\管制藥使用紀錄表")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\report\\管制藥使用紀錄表")]
         public string FilePath {
             get {
                 return ((string)(this["FilePath"]));
@@ -83,6 +83,45 @@ namespace ControlledDrugReportGenerator.Properties {
         public string MaxDay {
             get {
                 return ((string)(this["MaxDay"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("裝置報表")]
+        public string DeviceFileName {
+            get {
+                return ((string)(this["DeviceFileName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("標籤報表")]
+        public string LabelFileName {
+            get {
+                return ((string)(this["LabelFileName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12:18")]
+        public string RunCompareTime {
+            get {
+                return ((string)(this["RunCompareTime"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Print")]
+        public string PrintOrNoPrint {
+            get {
+                return ((string)(this["PrintOrNoPrint"]));
+            }
+            set {
+                this["PrintOrNoPrint"] = value;
             }
         }
     }

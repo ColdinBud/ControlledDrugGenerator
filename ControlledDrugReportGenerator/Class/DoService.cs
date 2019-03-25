@@ -33,31 +33,25 @@ namespace ControlledDrugReportGenerator.Class
                 string[] sourceOrderList = Directory.GetFiles(Properties.Settings.Default["SourcePath"].ToString(),
                     Properties.Settings.Default["OrderFileName"].ToString() + "*" + fileDateFormat + "*.csv", SearchOption.TopDirectoryOnly);
 
-                //將非注射用1-3級管制藥品取用紀錄移到紀錄表目錄底下
-                foreach (string str in sourceStationList)
-                {
-                    string stationFileName = str.Substring(str.LastIndexOf("\\") + 1);
-                    if (!File.Exists(string.Format("{0}\\{1}\\{3}\\{2}", filePath, dateTime, stationFileName, "原始資料")))
-                    {
-                        if (!File.Exists(String.Format("{0}\\{2}", filePath, dateTime, stationFileName)))
-                        {
-                            File.Copy(str, String.Format("{0}\\{2}", filePath, dateTime, stationFileName), false);
-                        }
-                    }
-                }
+                //Wait for next feature
+                //string[] sourceDeviceList = Directory.GetFiles(Properties.Settings.Default["SourcePath"].ToString(),
+                //    Properties.Settings.Default["DeviceFileName"].ToString() + "*" + fileDateFormat + "*.csv", SearchOption.TopDirectoryOnly);
 
+                //string[] sourceLabelList = Directory.GetFiles(Properties.Settings.Default["SourcePath"].ToString(),
+                //    Properties.Settings.Default["LabelFileName"].ToString() + "*" + fileDateFormat + "*.csv", SearchOption.TopDirectoryOnly);
+
+                //將非注射用1-3級管制藥品取用紀錄移到紀錄表目錄底下
+                MoveAndOrderFileList(sourceStationList);
+                
                 //將所有醫囑紀錄移到紀錄表目錄底下
-                foreach (string str in sourceOrderList)
-                {
-                    string orderFileName = str.Substring(str.LastIndexOf("\\") + 1);
-                    if (!File.Exists(string.Format("{0}\\{1}\\{3}\\{2}", filePath, dateTime, orderFileName, "原始資料")))
-                    {
-                        if (!File.Exists(String.Format("{0}\\{2}", filePath, dateTime, orderFileName)))
-                        {
-                            File.Copy(str, String.Format("{0}\\{2}", filePath, dateTime, orderFileName), false);
-                        }
-                    }
-                }
+                MoveAndOrderFileList(sourceOrderList);
+
+                //Wait for next feature
+                //將裝置記錄報表移到紀錄表目錄底下
+                //MoveAndOrderFileList(sourceDeviceList);
+
+                //將標籤記錄報表移到紀錄表目錄底下
+                //MoveAndOrderFileList(sourceLabelList);
             }
             catch
             {
@@ -67,6 +61,29 @@ namespace ControlledDrugReportGenerator.Class
             {
                 //string stationFilePath = filePath + "\\" + Properties.Settings.Default["StationFileName"].ToString() + "*.csv";
                 //string orderFilePath = filePath + "\\" + Properties.Settings.Default["OrderFileName"].ToString() + "*.csv";
+
+                string nowTime = DateTime.Now.ToString("HH:mm");
+
+                //Wait for next feature
+                /*
+                if (nowTime.Equals(Properties.Settings.Default.RunCompareTime))
+                {
+                    string[] deviceFilePathList = Directory.GetFiles(filePath,
+                        Properties.Settings.Default.DeviceFileName + "*.csv", SearchOption.TopDirectoryOnly);
+                    string deviceFilePath = deviceFilePathList.Length > 0 ? deviceFilePathList[0] : "";
+                    string deviceFileName = deviceFilePath.Substring(deviceFilePath.LastIndexOf("\\") + 1);
+
+                    string[] labelFilePathList = Directory.GetFiles(filePath,
+                        Properties.Settings.Default.DeviceFileName + "*.csv", SearchOption.TopDirectoryOnly);
+                    string labelFilePath = labelFilePathList.Length > 0 ? labelFilePathList[0] : "";
+                    string labelFileName = labelFilePath.Substring(labelFilePath.LastIndexOf("\\") + 1);
+
+                    if (!string.IsNullOrEmpty(deviceFileName) && !string.IsNullOrEmpty(labelFileName))
+                    {
+
+                    }
+                }
+                */
 
                 //取出唯一的所有醫囑
                 string[] orderFilePathList = Directory.GetFiles(filePath,
@@ -83,15 +100,9 @@ namespace ControlledDrugReportGenerator.Class
                     if (!string.IsNullOrEmpty(orderFilePath) && !string.IsNullOrEmpty(stationFilePath))
                     {
                         List<ReportData> stationList = CombineCsv.CreateCsv(stationFilePath, orderFilePath);
-                        if (!File.Exists(filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + stationFileName))
-                        {
-                            System.IO.File.Move(stationFilePath, filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + stationFileName);
-                        }
-                        else
-                        {
-                            string nowTime = DateTime.Now.ToString("HHmm");
-                            System.IO.File.Move(stationFilePath, filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + nowTime + stationFileName);
-                        }
+
+                        MoveFile(stationFileName, stationFilePath, dateTime, nowTime);
+
                         result += new ExcelFormatter().CreateTotal(stationList, stationFileName);
                         if (stationList.Count > 0 && stationList[0].MedID != null)
                         {
@@ -106,20 +117,57 @@ namespace ControlledDrugReportGenerator.Class
 
                 if (!string.IsNullOrEmpty(orderFileName))
                 {
-                    if (!File.Exists(filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + orderFileName))
-                    {
-                        System.IO.File.Move(orderFilePath, filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + orderFileName);
-                    }
-                    else
-                    {
-                        string nowTime = DateTime.Now.ToString("HHmm");
-                        System.IO.File.Move(orderFilePath, filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + nowTime + orderFileName);
-                    }
+                    MoveFile(orderFileName, orderFilePath, dateTime, nowTime);
                 }
 
             }
 
             return result;
+        }
+
+        private static void MoveAndOrderFileList(string[] fileList)
+        {
+            string filePath = Properties.Settings.Default["FilePath"].ToString();
+            string dateTime = DateTime.Now.ToString("yyyyMMdd");
+
+            foreach (string str in fileList)
+            {
+                string fileName = str.Substring(str.LastIndexOf("\\") + 1);
+                if (!File.Exists(string.Format("{0}\\{1}\\{3}\\{2}", filePath, dateTime, fileName, "原始資料")))
+                {
+                    if (!File.Exists(String.Format("{0}\\{2}", filePath, dateTime, fileName)))
+                    {
+                        File.Copy(str, String.Format("{0}\\{2}", filePath, dateTime, fileName), false);
+                    }
+                }
+            }
+        }
+
+        private static string GetFileName(string fileTypeName)
+        {
+            string filePath = Properties.Settings.Default["FilePath"].ToString();
+
+            string[] retFilePathList = Directory.GetFiles(filePath,
+                    Properties.Settings.Default[fileTypeName].ToString() + "*.csv", SearchOption.TopDirectoryOnly);
+            string retFilePath = retFilePathList.Length > 0 ? retFilePathList[0] : "";
+            string retFileName = retFilePath.Substring(retFilePath.LastIndexOf("\\") + 1);
+
+            return retFileName;
+        }
+
+        private static void MoveFile(string fileName, string retFilePath, string dateTime, string nowTime)
+        {
+            string filePath = Properties.Settings.Default["FilePath"].ToString();
+
+            if (!File.Exists(filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + fileName))
+            {
+                System.IO.File.Move(retFilePath, filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + fileName);
+            }
+            else
+            {
+                System.IO.File.Move(retFilePath, filePath + "\\" + dateTime + "\\" + "原始資料" + "\\" + nowTime + fileName);
+            }
+
         }
     }
 }
